@@ -3,8 +3,11 @@ import google.generativeai as genai
 
 # --- 1. THE ONLY FIX FOR THE 404/REGION ERROR ---
 # We use the 2026 stable alias 'gemini-2.5-flash'
-API_KEY = "AIzaSyCn01tI_3RkDsC2QUJbMCrClRJJs9weDao"
-genai.configure(api_key=API_KEY)
+# This fetches the key securely from your Streamlit Cloud settings
+if "GOOGLE_API_KEY" in st.secrets:
+    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+else:
+    st.error("API Key not found! Please add GOOGLE_API_KEY to your Streamlit Secrets.")
 
 st.set_page_config(page_title="WASN STUDIO", layout="wide", initial_sidebar_state="collapsed")
 
@@ -90,4 +93,5 @@ if st.button("Generate Content", key="gen_btn"):
             st.error(f"Region/API Error: {str(e)}")
             st.info("If this persists, your IP is likely blocked from the Free Tier. Using a VPN set to the USA or Europe usually fixes this instantly.")
     else:
+
         st.warning("Input required.")
